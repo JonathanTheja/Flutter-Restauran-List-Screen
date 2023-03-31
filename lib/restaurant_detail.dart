@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -16,7 +14,32 @@ class DetailRestaurantScreen extends StatelessWidget {
         appBar: AppBar(
           title: Text(restaurant.name),
         ),
-        // body: ,
-    );
-  } 
+        body: SingleChildScrollView(
+            child: Column(
+          children: [
+            Image.network(restaurant.pictureId),
+            Padding(
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(restaurant.description),
+                    Divider(color: Colors.red),
+                    Text(
+                      restaurant.city,
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24),
+                    ),
+                    const Divider(color: Colors.red),
+                    Text('Date: ${restaurant.rating}'),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                        onPressed: () {}, child: const Text('See Menu'))
+                  ],
+                )),
+          ],
+        )));
+  }
 }
