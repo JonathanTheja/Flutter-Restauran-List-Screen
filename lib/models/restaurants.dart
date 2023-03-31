@@ -6,8 +6,8 @@ class Restaurants {
   final String description;
   final String pictureId;
   final String city;
-  final double rating;
-  final Menus menus;
+  final String rating;
+  final Menus? menus;
 
   Restaurants(
       {required this.id,
@@ -24,9 +24,7 @@ class Restaurants {
     description: json['description'],
     pictureId: json['pictureId'],
     city: json['city'],
-    rating: json['rating'],
-    menus: Menus.fromJson(json['menus']),
+    rating: json['rating'].toString(),
+    menus: json['menus'] != null ? new Menus.fromJson(json['menus']) : null
   );
 }
-
-

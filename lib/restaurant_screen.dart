@@ -1,26 +1,56 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-
+import 'package:flutter/services.dart';
+import 'package:restoapp/restaurant_detail.dart';
 import 'models/restaurants.dart';
 
 class RestaurantListScreen extends StatelessWidget {
-  static const routeName="resto_list";
+  static const routeName = "resto_list";
   const RestaurantListScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Restaurant App"),
-      )
-    );
+        appBar: AppBar(
+          title: const Text("Restaurant App"),
+        ),
+        body: FutureBuilder<String>(
+          future: DefaultAssetBundle.of(context)
+              .loadString('assets/local_restaurant.json'),
+          builder: (context, snapshot) {
+            final List<Restaurants> restaurants =
+                parseRestaurants(snapshot.data);
+            return ListView.builder(
+              itemCount: restaurants.length,
+              itemBuilder: (context, index) {
+                return buildItem(context, restaurants[index]);
+              },
+            );
+          },
+        ));
   }
 }
+
 List<Restaurants> parseRestaurants(String? json) {
-  if (json==null) {
+  if (json == null) {
     return [];
   }
-  final List parsed=jsonDecode(json)["restaurants"];
-  return parsed.map((json)=>Restaurants.fromJson(json)).toList();
+  final List parsed = jsonDecode(json)["restaurants"];
+  return parsed.map((json) => Restaurants.fromJson(json)).toList();
+}
+
+Widget buildItem(BuildContext context, Restaurants restaurant) {
+  return ListTile(
+      // contentPadding:
+      //     const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      contentPadding:
+          const EdgeInsets.only(left: 10.0, right: 10.0, top: 6.0, bottom: 6.0),
+      leading: Image.network(restaurant.pictureId, width: 100),
+      title: Text(restaurant.name),
+      subtitle: Text(restaurant.city),
+      onTap: () {
+        Navigator.pushNamed(context, DetailRestaurantScreen.routeName,
+            arguments: restaurant);
+      });
 }
